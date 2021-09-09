@@ -1,32 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include('../partials/head'); %>
 </head>
-<body class="container">
 
+<body class="container">
     <header>
         <%- include('../partials/header'); %>
     </header>
 
     <main>
         <div class="jumbotron">
-            <h1>Top Mascots</h1>
-            <p><%= tagline %></p>
-            <ul>
-                <% mascots.forEach(function(mascot) { %>
-                    <li>
-                        <strong><%= mascot.name %></strong>
-                        representing <%= mascot.organization %>, born <%= mascot.birth_year %>
-                    </li>
-                <% }); %>
-            </ul>
+            <div class="display-5">Introducir el ID de la operación y la cantidad que desea calcular</div>
+            <div>&nbsp;</div>
+            <form action="/calculadora" method="POST">
+                <div class="row"><label class="col-1">Id: </label>
+                    <input type="text" name="id" value="<%=id%>" autocomplete="true" required>
+                </div>
+                <div>&nbsp;</div>
+                <div class="row"><label class="col-1">Accion</label>
+                    <div>
+                        <select name="accion" required>
+                            <option value="+">Sumar</option>
+                            <option value="-">Restar</option>
+                            <option value="*">Multiplicar</option>
+                            <option value="/">Dividir</option>
+                            <option value="Resetear">Resetear</option>
+                        </select>
+                    </div>
+                    <div>&nbsp;</div>
+                </div class="row">
+                <div class="row">
+                    <label class="col-1"> Numero: </label><input type="number" name="numero" value="0" required>
+                </div>
+                <div>&nbsp;</div>
+                <div class="row">
+                    <div class="col-2 offset-md-1">
+                        <button type="submit">Enviar</button>
+                    </div>
+                    <div class="col-2">
+                        <button type="reset">Reset</button>
+                    </div>
+                </div>
         </div>
+        </form>
     </main>
 
-    <footer>
-        <%- include('../partials/footer'); %>
-    </footer>
+    <div><%= log %><div>
+
+                <footer>
+                    <%- include('../partials/footer'); %>
+
+                </footer>
 
 </body>
+
 </html>

@@ -1,31 +1,121 @@
 // load the things we need
 var express = require('express');
 var app = express();
-
+var fechas = []
+var valoresV = []
+var informacion = []
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-// use res.render to load up an ejs view file
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// index page 
-app.get('/', function(req, res) {
-    var mascots = [
-        { name: 'Sammy', organization: "DigitalOcean", birth_year: 2012},
-        { name: 'Tux', organization: "Linux", birth_year: 1996},
-        { name: 'Moby Dock', organization: "Docker", birth_year: 2013}
-    ];
-    var tagline = "No programming concept is complete without a cute animal mascot.";
-
+// pagina principal 
+app.get('/', function (req, res) {
     res.render('pages/index', {
-        mascots: mascots,
-        tagline: tagline
+        id: req.query.id || "",
+        log: ""
     });
 });
 
-// about page
-app.get('/about', function(req, res) {
+// pagina del cálculo
+app.post('/calculadora', (req, res) => {
+    //Variables
+    var id = req.body.id;
+    var numero = parseFloat(req.body.numero);
+    var accion = req.body.accion
+    var horaActual = new Date()
+    var operaciones = "";
+    var fecha = fechas[id]
+    fechas[id] = horaActual
+    var valor = valoresV[id]
+
+    informacion.push({ id, accion, numero, horaActual })
+
+    if (isNaN(valor)) {
+        valor = 0;
+    }
+
+    switch (accion) {
+        case "+":
+            valor += numero;
+            break;
+
+        case "-":
+            valor -= numero;
+            break;
+
+        case "*":
+            valor *= numero;
+            break;
+
+        case "/":
+            valor /= numero;
+            break;
+
+        case "Resetear":
+            limpiarRegistros(id)
+            res.render('pages/index', {
+                id,
+                log: "Reseteados valores para id: " + id
+            });
+            return;
+    }
+
+    valoresV[id] = valor
+
+    for (i = 0; i < informacion.length; i++) {
+        if (informacion[i].id == id) {
+            operaciones += " " + informacion[i].accion + " " + informacion[i].numero;
+        }
+    }
+
+    res.render('pages/calculadora', {
+        accion,
+        numero,
+        id,
+        valor,
+        operaciones,
+        fecha,
+        horaActual
+    });
+})
+
+
+function limpiarRegistros(id) {
+    fechas.splice(id, 1)
+    valoresV.splice(id, 1)
+
+    informacion = informacion.filter(i => {
+        i.id != id
+    })
+}
+
+function tiempoMinuto() {
+    var minutoActual = new Date().getTime()
+    for (i = 0; i < informacion.length; i++) {
+        //console.log(informacion[i].horaActual.getTime())
+
+        diferenciaTiempo = minutoActual - informacion[i].horaActual.getTime()
+        //console.log(diferenciaTiempo)
+
+        if(diferenciaTiempo >= 60000){
+            limpiarRegistros(informacion[i].id)
+        }
+
+    }
+}
+
+
+// pagina about
+app.get('/about', function (req, res) {
     res.render('pages/about');
 });
 
-app.listen(8080);
-console.log('8080 is the magic port');
+
+app.listen(443, () => {
+    console.log('443 is the magic port');
+    setInterval(tiempoMinuto, 1000);
+});
+
+

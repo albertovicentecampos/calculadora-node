@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+
+    <header>
+        <%- include('../partials/header'); %>
+    </header>
+
+    <main>
+        <a href="/?id=<%=id %>" >Volver a realizar otra operacion</a>
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="jumbotron">
+                    <h1>RESULTADO DE LA OPERACION</h1>
+                    <p> Ultima operacion: :  <%= accion %> con número <%= numero %> del ID: <%= id %> </p>
+                    <p> Operaciones realizadas:  <%= operaciones %> </p>
+                    <p> Valor resultante:  <%= valor %> </p>
+                </div>
+            </div>
+
+        </div>
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+
+</body>
+
+</html>
