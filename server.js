@@ -18,6 +18,7 @@ app.get('/', function (req, res) {
     });
 });
 
+
 // pagina del cálculo
 app.post('/calculadora', (req, res) => {
     //Variables
@@ -93,17 +94,15 @@ function limpiarRegistros(id) {
 
 function tiempoMinuto() {
     var minutoActual = new Date().getTime()
-    for (i = 0; i < informacion.length; i++) {
-        //console.log(informacion[i].horaActual.getTime())
 
-        diferenciaTiempo = minutoActual - informacion[i].horaActual.getTime()
-        //console.log(diferenciaTiempo)
+    const registros = informacion.find( i => 
+        (minutoActual - i.horaActual.getTime()) >= 60000
+    )
 
-        if(diferenciaTiempo >= 60000){
-            limpiarRegistros(informacion[i].id)
-        }
-
+    for( i in registros ){
+        limpiarRegistros(i.id)
     }
+
 }
 
 
