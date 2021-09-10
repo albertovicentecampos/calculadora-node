@@ -1,6 +1,7 @@
 // load the things we need
 var express = require('express');
 var app = express();
+var port = 443 
 var fechas = []
 var valoresV = []
 var informacion = []
@@ -51,6 +52,12 @@ app.post('/calculadora', (req, res) => {
             break;
 
         case "/":
+            if(numero == 0){
+                res.render('pages/error', {
+                    id
+                });
+                return; 
+            }
             valor /= numero;
             break;
 
@@ -112,8 +119,8 @@ app.get('/about', function (req, res) {
 });
 
 
-app.listen(443, () => {
-    console.log('443 is the magic port');
+app.listen(port, () => {
+    console.log(`${port} is the magic port`);
     setInterval(tiempoMinuto, 1000);
 });
 
